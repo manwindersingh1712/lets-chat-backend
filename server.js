@@ -1,13 +1,15 @@
 const express = require("express");
-const app = express();
 const http = require("http");
 const authRouter = require("./routes/auth");
+const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server);
 
+const mongoose = require("mongoose");
+
 require("dotenv").config();
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT;
 
 // check working server
 app.get("/", (req, res, next) => {
@@ -23,3 +25,13 @@ io.on("connection", (socket) => {
 server.listen(port, () => {
   console.log(`Server listening to ${port}`);
 });
+
+mongoose
+  .connect(`${process.env.DATABASE}`)
+  .then((result) => {
+    console.log("connected to database!!");
+  })
+  .catch((err) => {
+    console.log("connection failed!!");
+    console.log(err);
+  });
