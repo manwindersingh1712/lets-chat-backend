@@ -7,9 +7,15 @@ const User = require("../models/User");
 
 // Sign up
 authRouter.post("/signup", async (req, res, next) => {
-  console.log(req.body);
-  const errors = validationResult(req);
+  const user = await User.findOne({ email: email });
 
+  if (user) {
+    const error = new Error("User already exists!");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error("Validation Failed!!");
     error.statusCode = 422;
