@@ -2,11 +2,11 @@ const authRouter = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
-
+const middleware = require("./middleware");
 const User = require("../models/User");
 
 // get users
-authRouter.get("/getuser/:userId", async (req, res, next) => {
+authRouter.get("/getuser/:userId", middleware, async (req, res, next) => {
   const { userId } = req.params;
 
   try {
