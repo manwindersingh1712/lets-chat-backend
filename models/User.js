@@ -14,8 +14,8 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   roomIds: {
-    type: Array[String],
-    required: true,
+    type: String,
+    required: false,
   },
 });
 
