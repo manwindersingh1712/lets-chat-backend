@@ -38,8 +38,9 @@ authRouter.post("/signup", async (req, res, next) => {
     res.status(201).json({ message: "New admin Registered" });
   } catch (err) {
     const error = new Error(err);
-    const { statusCode, message } = error;
-    res.send({ statusCode, message });
+    error.statusCode = 400;
+    error.message = err.message;
+    res.send({ statusCode: error.statusCode, message: error.message });
     console.log(error);
   }
 });
@@ -76,9 +77,10 @@ authRouter.post("/login", async (req, res, next) => {
     res.status(200).json({ token: token, userId: user._id.toString() });
   } catch (err) {
     const error = new Error(err);
-    const { statusCode, message } = error;
-    res.send({ statusCode, message });
-    console.log(err);
+    error.statusCode = 400;
+    error.message = err.message;
+    res.send({ statusCode: error.statusCode, message: error.message });
+    console.log(error);
   }
 });
 
