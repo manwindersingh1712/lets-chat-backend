@@ -18,14 +18,10 @@ const userSchema = new mongoose.Schema({
         },
       }
     ],
-    required: true,
+    required: false,
   },
   password: {
     type: String,
-    required: true,
-  },
-  roomIds: {
-    type: Array[String],
     required: true,
   },
 });

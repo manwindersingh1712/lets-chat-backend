@@ -5,6 +5,30 @@ const { validationResult } = require("express-validator");
 
 const User = require("../models/User");
 
+// get users
+authRouter.get("/getuser", async (req, res, next) => {
+  const { userId } = req.body;
+
+  try {
+    const user = await User.findOne({ _id: userId });
+    //   If user doesnot exists send error
+    if (!user) {
+      const error = new Error("User not found!");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const { email, name, roomIds } = user;
+
+    res.send({ email, name, roomIds });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+});
+
 // Sign up
 authRouter.post("/signup", async (req, res, next) => {
   const { email, name, password } = req.body;
@@ -15,7 +39,7 @@ authRouter.post("/signup", async (req, res, next) => {
     //   If user doesnot exists return
     if (user) {
       const error = new Error("User already exists!");
-      error.statusCode = 400;
+      error.statusCode = 409;
       throw error;
     }
 
