@@ -35,4 +35,75 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
+// Login
+router.post("/login", (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      const error = new Error("User not found with the given email!");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const isPassCorrect = await bcrypt.compare(password, loadAdmin.password);
+
+    if (!isPassCorrect) {
+      const error = new Error("Password didn't match!");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const token = jwt.sign(
+      {
+        email: user.email,
+        adminId: user._id.toString(),
+      },
+      process.env.TOP_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token: token, userId: user._id.toString() });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/login", (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      const error = new Error("User not found with the given email!");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const isPassCorrect = await bcrypt.compare(password, loadAdmin.password);
+
+    if (!isPassCorrect) {
+      const error = new Error("Password didn't match!");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const token = jwt.sign(
+      {
+        email: user.email,
+        adminId: user._id.toString(),
+      },
+      process.env.TOP_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token: token, userId: user._id.toString() });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+
 module.exports = router;
