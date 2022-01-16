@@ -37,7 +37,10 @@ authRouter.post("/signup", async (req, res, next) => {
     newUser.save();
     res.status(201).json({ message: "New admin Registered" });
   } catch (err) {
-    console.log(err);
+    const error = new Error(err);
+    const { statusCode, message } = error;
+    res.send({ statusCode, message });
+    console.log(error);
   }
 });
 
@@ -72,6 +75,9 @@ authRouter.post("/login", async (req, res, next) => {
 
     res.status(200).json({ token: token, userId: user._id.toString() });
   } catch (error) {
+    const error = new Error(err);
+    const { statusCode, message } = error;
+    res.send({ statusCode, message });
     console.log(error);
   }
 });
