@@ -74,11 +74,11 @@ authRouter.post("/login", async (req, res, next) => {
     );
 
     res.status(200).json({ token: token, userId: user._id.toString() });
-  } catch (error) {
+  } catch (err) {
     const error = new Error(err);
     const { statusCode, message } = error;
     res.send({ statusCode, message });
-    console.log(error);
+    console.log(err);
   }
 });
 
