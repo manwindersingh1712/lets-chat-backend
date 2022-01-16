@@ -39,3 +39,11 @@ mongoose
     console.log("connection failed!!");
     console.log(err);
   });
+
+// Error handling
+app.use((error, req, res, next) => {
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  res.status(status).json({ err: error, message });
+});
