@@ -7,34 +7,34 @@ const User = require("../models/User");
 
 // Sign up
 authRouter.post("/signup", async (req, res, next) => {
-  const user = await User.findOne({ email: email });
-
-  if (user) {
-    const error = new Error("User already exists!");
-    error.statusCode = 400;
-    throw error;
-  }
-
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = new Error("Validation Failed!!");
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
-  }
-  const email = req.body.email;
-  const name = req.body.name;
-  const password = req.body.password;
+  const { email, name, password } = req.body;
 
   try {
+    const user = await User.findOne({ email: email });
+
+    //   If user doesnot exists return
+    if (user) {
+      const error = new Error("User already exists!");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const error = new Error("Validation Failed!!");
+      error.statusCode = 422;
+      error.data = errors.array();
+      throw error;
+    }
+
     const hashedPass = await bcrypt.hash(password, 12);
-    const user = new User({
+    const newUser = new User({
       name: name,
       email: email,
       password: hashedPass,
     });
 
-    user.save();
+    newUser.save();
     res.status(201).json({ message: "New admin Registered" });
   } catch (err) {
     console.log(err);
