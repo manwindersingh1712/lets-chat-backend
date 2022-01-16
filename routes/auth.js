@@ -7,6 +7,7 @@ const User = require("../models/User");
 
 // Sign up
 authRouter.post("/signup", async (req, res, next) => {
+  console.log(req.body);
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -25,7 +26,6 @@ authRouter.post("/signup", async (req, res, next) => {
       name: name,
       email: email,
       password: hashedPass,
-      roomIds: [""],
     });
 
     user.save();
@@ -37,9 +37,9 @@ authRouter.post("/signup", async (req, res, next) => {
 
 // Login
 authRouter.post("/login", async (req, res, next) => {
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
-    const user = User.findOne({ email: email });
+    const user = await User.findOne({ email: email });
 
     if (!user) {
       const error = new Error("User not found with the given email!");
@@ -47,7 +47,7 @@ authRouter.post("/login", async (req, res, next) => {
       throw error;
     }
 
-    const isPassCorrect = await bcrypt.compare(password, loadAdmin.password);
+    const isPassCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPassCorrect) {
       const error = new Error("Password didn't match!");

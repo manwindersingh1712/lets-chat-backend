@@ -11,12 +11,15 @@ require("dotenv").config();
 
 const port = process.env.PORT;
 
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 // check working server
 app.get("/", (req, res, next) => {
   return res.send({ message: "working fine!!" });
 });
 
-app.get(authRouter);
+app.use(authRouter);
 
 io.on("connection", (socket) => {
   console.log("connected to socket");
