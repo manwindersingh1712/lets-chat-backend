@@ -6,8 +6,8 @@ const { validationResult } = require("express-validator");
 const User = require("../models/User");
 
 // get users
-authRouter.get("/getuser", async (req, res, next) => {
-  const { userId } = req.body;
+authRouter.get("/getuser/:userId", async (req, res, next) => {
+  const { userId } = req.params;
 
   try {
     const user = await User.findOne({ _id: userId });
