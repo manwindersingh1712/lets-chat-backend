@@ -55,6 +55,9 @@ io.on("connection", async (socket) => {
       });
 
       newMessage.save();
+
+      const { roomIds } = await User.findOne({ _id: joinerID });
+      await roomIds.findOneAndUpdate({ _id: roomId });
     } catch (err) {
       console.log(err);
     }
