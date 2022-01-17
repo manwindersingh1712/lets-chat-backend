@@ -11,6 +11,7 @@ const cors = require("cors");
 
 const mongoose = require("mongoose");
 const User = require("./models/User");
+const Message = require("./models/message");
 
 require("dotenv").config();
 
@@ -27,7 +28,7 @@ app.get("/", (req, res, next) => {
 app.use(authRouter);
 app.use(require("./routes/room"));
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   console.log("connected to socket");
   socket.on("join", async (joinerID) => {
     const { roomIds } = await User.findOne({ _id: joinerID });
@@ -35,6 +36,26 @@ io.on("connection", (socket) => {
     roomIds.map((room) => {
       socket.join(JSON.stringify(room));
     });
+  });
+
+  socket.on("send-message", async (data) => {
+    try {
+      const { from, msg, roomID, createdAt } = data;
+
+      let newMessage = new Message({
+        from,
+        msg,
+        roomId,
+        createdAt,
+      });
+
+      const { _id } = await newMessage.save();
+      socket.to(JSON.stringify(roomID)).emit("get-message", { ...data, _id });
+
+      await rooms.findOneAndUpdate({ _id: roomID });
+    } catch (err) {
+      console.log(err);
+    }
   });
 });
 
