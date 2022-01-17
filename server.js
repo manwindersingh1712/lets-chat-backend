@@ -9,7 +9,7 @@ const io = require("socket.io")(server, {
     origin: ["*"], // For All origin
   },
 });
-
+const moment = require("moment");
 const cors = require("cors");
 
 const mongoose = require("mongoose");
@@ -44,7 +44,7 @@ io.on("connection", async (socket) => {
 
   socket.on("send-message", async (data) => {
     try {
-      const { from, msg, roomID, createdAt, id } = data;
+      const { from, msg, roomId, createdAt, id } = data;
 
       socket.to(JSON.stringify(roomID)).emit("get-message", { ...data });
 
@@ -53,7 +53,7 @@ io.on("connection", async (socket) => {
         from,
         msg,
         roomId,
-        createdAt,
+        createdAt: moment(createdAt),
       });
 
       newMessage.save();
