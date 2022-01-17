@@ -52,6 +52,7 @@ io.on("connection", async (socket) => {
         msg,
         roomId,
         createdAt,
+        name,
       });
       newMessage.save();
 

@@ -15,6 +15,10 @@ const MessageSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Users",
     },
+    name: {
+      type: String,
+      required: true,
+    },
     msg: {
       type: String,
       required: true,
