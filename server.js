@@ -44,7 +44,7 @@ io.on("connection", async (socket) => {
 
   socket.on("send-message", async (data) => {
     try {
-      const { from, msg, roomId, createdAt, id } = data;
+      const { from, msg, roomId, createdAt, id, name } = data;
       io.sockets.to(roomId).emit("get-message", { ...data });
       let newMessage = new Message({
         _id: id,
