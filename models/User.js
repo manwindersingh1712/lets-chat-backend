@@ -14,7 +14,12 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   roomIds: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Rooms",
+      },
+    ],
     required: false,
   },
 });

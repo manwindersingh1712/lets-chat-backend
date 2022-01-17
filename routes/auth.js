@@ -10,7 +10,7 @@ authRouter.get("/getuser/:userId", middleware, async (req, res, next) => {
   const { userId } = req.params;
 
   try {
-    const user = await User.findOne({ _id: userId });
+    const user = await User.findOne({ _id: userId }).populate("roomIds");
     //   If user doesnot exists send error
     if (!user) {
       const error = new Error("User not found!");
@@ -18,9 +18,7 @@ authRouter.get("/getuser/:userId", middleware, async (req, res, next) => {
       throw error;
     }
 
-    const { email, name, roomIds } = user;
-
-    res.send({ email, name, roomIds });
+    res.send(user);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

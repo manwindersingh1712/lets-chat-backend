@@ -3,8 +3,12 @@ const mongoose = require("mongoose");
 
 const RoomSchema = new Schema({
   users: {
-    type: [Schema.Types.ObjectId],
-    ref: "Users",
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Users",
+      },
+    ],
   },
   name: {
     type: String,

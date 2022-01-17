@@ -59,16 +59,16 @@ router.put("/joinroom", middleware, async (req, res, next) => {
     }
 
     const { roomIds } = user;
-    if (roomIds.includes(roomId)) {
+    const { users, _id } = room;
+    if (roomIds.includes(_id)) {
       const error = new Error("User is already in room!");
       error.statusCode = 403;
       throw error;
     }
 
-    user.roomIds = [...roomIds, roomId];
+    user.roomIds = [...roomIds, _id];
     user.save();
 
-    const { users } = room;
     room.users = [...users, userId];
     room.save();
 
