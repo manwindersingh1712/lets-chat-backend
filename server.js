@@ -46,7 +46,7 @@ io.on("connection", async (socket) => {
     try {
       const { from, msg, roomId, createdAt, id } = data;
 
-      socket.to(JSON.stringify(roomID)).emit("get-message", { ...data });
+      socket.to(JSON.stringify(roomId)).emit("get-message", { ...data });
 
       let newMessage = new Message({
         _id: id,
