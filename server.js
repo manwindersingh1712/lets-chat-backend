@@ -5,8 +5,11 @@ const authRouter = require("./routes/auth");
 const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
-  cors: ["*"],
+  cors: {
+    origin: ["*"], // For All origin
+  },
 });
+
 const cors = require("cors");
 
 const mongoose = require("mongoose");
