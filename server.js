@@ -1,6 +1,6 @@
 const express = require("express");
 const http = require("http");
-const Room = require("../models/Room");
+const Room = require("./models/Room");
 const authRouter = require("./routes/auth");
 const app = express();
 const server = http.createServer(app);
