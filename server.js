@@ -36,16 +36,16 @@ io.on("connection", async (socket) => {
     const { roomIds } = await User.findOne({ _id: joinerID });
 
     roomIds.map((room) => {
-      socket.join(JSON.stringify(room));
+      console.log(room);
+      socket.join(room.toString());
     });
+    console.log(socket.rooms);
   });
 
   socket.on("send-message", async (data) => {
     try {
       const { from, msg, roomId, createdAt, id } = data;
-
-      socket.to(JSON.stringify(roomId)).emit("get-message", { ...data });
-
+      io.sockets.to(roomId).emit("get-message", { ...data });
       let newMessage = new Message({
         _id: id,
         from,
@@ -53,7 +53,6 @@ io.on("connection", async (socket) => {
         roomId,
         createdAt,
       });
-
       newMessage.save();
     } catch (err) {
       console.log(err);
