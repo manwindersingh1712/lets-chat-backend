@@ -23,10 +23,11 @@ app.get("/", (req, res, next) => {
 });
 
 app.use(authRouter);
+app.use(require("./routes/room"));
 
 io.on("connection", (socket) => {
   console.log("connected to socket");
-  socket()
+  socket();
 });
 
 server.listen(port, () => {
