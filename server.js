@@ -1,6 +1,5 @@
 const express = require("express");
 const http = require("http");
-const Room = require("./models/Room");
 const authRouter = require("./routes/auth");
 const app = express();
 const server = http.createServer(app);
@@ -9,7 +8,6 @@ const io = require("socket.io")(server, {
     origin: ["*"], // For All origin
   },
 });
-const moment = require("moment");
 const cors = require("cors");
 
 const mongoose = require("mongoose");
@@ -53,7 +51,7 @@ io.on("connection", async (socket) => {
         from,
         msg,
         roomId,
-        createdAt: moment(createdAt),
+        createdAt,
       });
 
       newMessage.save();
