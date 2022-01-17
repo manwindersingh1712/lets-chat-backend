@@ -4,7 +4,7 @@ module.exports = (req, res, next) => {
   try {
     const token = req.header("AUTH_TOKEN");
     if (!token) {
-      const error = new Error("User session timed out!!");
+      const error = new Error("Invalid token!!");
       error.statusCode = 403;
       throw error;
     }
@@ -17,6 +17,7 @@ module.exports = (req, res, next) => {
     req.user = verified;
     next();
   } catch (err) {
-    res.status(403).send("Invalid token");
+    err.statusCode = 403;
+    next(err);
   }
 };

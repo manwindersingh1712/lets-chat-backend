@@ -94,7 +94,7 @@ authRouter.post("/login", async (req, res, next) => {
         adminId: user._id.toString(),
       },
       process.env.TOP_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: 10 }
     );
 
     res.status(200).json({ token: token, userId: user._id.toString() });
