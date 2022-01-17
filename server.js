@@ -43,19 +43,19 @@ io.on("connection", async (socket) => {
 
   socket.on("send-message", async (data) => {
     try {
-      const { from, msg, roomID, createdAt } = data;
+      const { from, msg, roomID, createdAt, id } = data;
+
+      socket.to(JSON.stringify(roomID)).emit("get-message", { ...data });
 
       let newMessage = new Message({
+        _id: id,
         from,
         msg,
         roomId,
         createdAt,
       });
 
-      const { _id } = await newMessage.save();
-      socket.to(JSON.stringify(roomID)).emit("get-message", { ...data, _id });
-
-      await rooms.findOneAndUpdate({ _id: roomID });
+      newMessage.save();
     } catch (err) {
       console.log(err);
     }
