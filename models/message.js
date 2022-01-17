@@ -10,10 +10,6 @@ const MessageSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Users",
   },
-  to: {
-    type: Schema.Types.ObjectId,
-    ref: "Users",
-  },
   msg: {
     type: String,
     required: true,

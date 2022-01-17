@@ -56,6 +56,7 @@ authRouter.post("/signup", async (req, res, next) => {
       name: name,
       email: email,
       password: hashedPass,
+      roomIds: [],
     });
 
     newUser.save();
