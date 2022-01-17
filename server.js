@@ -1,5 +1,6 @@
 const express = require("express");
 const http = require("http");
+const Room = require("../models/Room");
 const authRouter = require("./routes/auth");
 const app = express();
 const server = http.createServer(app);
@@ -9,6 +10,7 @@ const io = require("socket.io")(server, {
 const cors = require("cors");
 
 const mongoose = require("mongoose");
+const User = require("./models/User");
 
 require("dotenv").config();
 
@@ -27,7 +29,13 @@ app.use(require("./routes/room"));
 
 io.on("connection", (socket) => {
   console.log("connected to socket");
-  socket();
+  socket.on("join", async (joinerID) => {
+    const { roomIds } = await User.findOne({ _id: joinerID });
+
+    roomIds.map((room) => {
+      socket.join(JSON.stringify(room));
+    });
+  });
 });
 
 server.listen(port, () => {
