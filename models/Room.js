@@ -1,33 +1,16 @@
+const Schema = require("mongoose").Schema;
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  roomId: {
+const RoomSchema = new Schema({
+  users: {
+    type: [String],
+    ref: "Users",
+  },
+  name: {
     type: String,
     required: true,
   },
-  chat: {
-    type: Array[
-      {
-        from: {
-          type: String,
-          required: true,
-        },
-        to: {
-          type: String,
-          required: true,
-        },
-      }
-    ],
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  roomIds: {
-    type: Array[String],
-    required: true,
-  },
+  timestamps: { createdAt: true, updatedAt: true },
 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Rooms", RoomSchema);

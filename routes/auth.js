@@ -2,8 +2,32 @@ const authRouter = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
-
+const middleware = require("./middleware");
 const User = require("../models/User");
+
+// get users
+authRouter.get("/getuser/:userId", middleware, async (req, res, next) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findOne({ _id: userId });
+    //   If user doesnot exists send error
+    if (!user) {
+      const error = new Error("User not found!");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const { email, name, roomIds } = user;
+
+    res.send({ email, name, roomIds });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+});
 
 // Sign up
 authRouter.post("/signup", async (req, res, next) => {
@@ -15,7 +39,7 @@ authRouter.post("/signup", async (req, res, next) => {
     //   If user doesnot exists return
     if (user) {
       const error = new Error("User already exists!");
-      error.statusCode = 400;
+      error.statusCode = 409;
       throw error;
     }
 
@@ -70,7 +94,7 @@ authRouter.post("/login", async (req, res, next) => {
         adminId: user._id.toString(),
       },
       process.env.TOP_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: 10 }
     );
 
     res.status(200).json({ token: token, userId: user._id.toString() });

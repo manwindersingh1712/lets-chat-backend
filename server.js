@@ -29,6 +29,7 @@ app.use(authRouter);
 
 io.on("connection", (socket) => {
   console.log("connected to socket");
+  socket();
 });
 
 io.on("connection", (socket) => {
