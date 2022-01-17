@@ -40,11 +40,11 @@ router.post("/create-room", middleware, async (req, res, next) => {
   }
 });
 
-router.put("/addusertoroom", middleware, async (req, res, next) => {
-  const { userId, roomId } = req.body;
+router.put("/joinroom", middleware, async (req, res, next) => {
+  const { userId, name } = req.body;
 
   try {
-    const room = await Room.findOne({ _id: roomId });
+    const room = await Room.findOne({ name: name });
     if (!room) {
       const error = new Error("Room does not exists!");
       error.statusCode = 402;
@@ -59,16 +59,16 @@ router.put("/addusertoroom", middleware, async (req, res, next) => {
     }
 
     const { roomIds } = user;
-    if (roomIds.includes(roomId)) {
+    const { users, _id } = room;
+    if (roomIds.includes(_id)) {
       const error = new Error("User is already in room!");
       error.statusCode = 403;
       throw error;
     }
 
-    user.roomIds = [...roomIds, roomId];
+    user.roomIds = [...roomIds, _id];
     user.save();
 
-    const { users } = room;
     room.users = [...users, userId];
     room.save();
 
