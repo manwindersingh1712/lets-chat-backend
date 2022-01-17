@@ -2,7 +2,7 @@ const Schema = require("mongoose").Schema;
 const mongoose = require("mongoose");
 
 const MessageSchema = new Schema({
-  roomID: {
+  roomId: {
     type: Schema.Types.ObjectId,
     ref: "Rooms",
   },

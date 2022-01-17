@@ -31,7 +31,7 @@ router.post("/create-room", middleware, async (req, res, next) => {
     const { roomIds } = user;
     user.roomIds = [...roomIds, _id];
     user.save();
-    res.status(201).json({ message: "New Room created" });
+    res.status(201).json({ roomId: _id, message: "New Room created" });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

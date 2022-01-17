@@ -30,6 +30,7 @@ app.get("/", (req, res, next) => {
 
 app.use(authRouter);
 app.use(require("./routes/room"));
+app.use(require("./routes/message"));
 
 io.on("connection", async (socket) => {
   console.log("connected to socket");
